@@ -1,6 +1,7 @@
 package ru.gb.springdemo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.gb.springdemo.api.IssueRequest;
 import ru.gb.springdemo.model.Issue;
@@ -19,6 +20,9 @@ public class IssuerService {
   private final ReaderRepository readerRepository;
   private final IssueRepository issueRepository;
 
+  @Value("${application.max-allowed-books:1}")
+  private long maxAllowedBooks;
+
   public Issue issue(IssueRequest request) {
     if (bookRepository.getBookById(request.getBookId()) == null) {
       throw new NoSuchElementException("Не найдена книга с идентификатором \"" + request.getBookId() + "\"");
@@ -26,8 +30,8 @@ public class IssuerService {
     if (readerRepository.getReaderById(request.getReaderId()) == null) {
       throw new NoSuchElementException("Не найден читатель с идентификатором \"" + request.getReaderId() + "\"");
     }
-    if(issueRepository.findIssueByReaderId(request.getReaderId()) != null){
-      throw new RuntimeException("Читателю \"" + request.getReaderId() + "уже выдана книга" + request.getBookId()+ "\"");
+    if(issueRepository.amountOfBooksByReaderId(request.getReaderId()) >= maxAllowedBooks){
+      throw new RuntimeException("Читатель \"" + request.getReaderId() + "не может больше взять книг" );
     }
 
 

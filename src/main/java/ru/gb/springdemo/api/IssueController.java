@@ -25,10 +25,13 @@ public class IssueController {
     this.repo = repo;
   }
 
-//  @PutMapping
-//  public void returnBook(long issueId) {
-//    // найти в репозитории выдачу и проставить ей returned_at
-//  }
+  /*
+  Возврат книги
+   */
+  @PutMapping("/{issueId}")
+  public void returnBook(@PathVariable long issueId) {
+    repo.returnBook(issueId);
+  }
 
   /*
   Поиск запроса на выдачу книги по идентификатору
