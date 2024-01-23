@@ -3,7 +3,7 @@ package ru.gb.springdemo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.gb.springdemo.api.IssueRequest;
+import ru.gb.springdemo.api.rest.IssueRequest;
 import ru.gb.springdemo.model.Issue;
 import ru.gb.springdemo.repository.BookRepository;
 import ru.gb.springdemo.repository.IssueRepository;

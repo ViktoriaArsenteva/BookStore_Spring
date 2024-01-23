@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Issued Books</title>
+</head>
+<body>
+<h1>Issued Books List</h1>
+<table>
+    <tr>
+        <th>Book</th>
+        <th>Reader</th>
+        <th>Issued At</th>
+        <th>Returned At</th>
+    </tr>
+    <tr th:each="issue : ${issues}">
+        <td th:text="${issue.bookId}"></td>
+        <td th:text="${issue.readerId}"></td>
+        <td th:text="${issue.issuedAt}"></td>
+        <td th:text="${issue.returnedAt != null ? issue.returnedAt : 'Not returned'}"></td>
+    </tr>
+</table>
+</body>
+</html>

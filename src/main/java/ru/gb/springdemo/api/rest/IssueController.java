@@ -1,4 +1,4 @@
-package ru.gb.springdemo.api;
+package ru.gb.springdemo.api.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

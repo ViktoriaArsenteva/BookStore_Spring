@@ -43,6 +43,12 @@ public class IssueRepository {
             .collect(Collectors.toList());
   }
 
+  public List<Issue> getNotReturnedIssuesByReaderId(long readerId) {
+    return issues.stream()
+            .filter(it -> Objects.isNull(it.getReturnedAt()))
+            .collect(Collectors.toList());
+  }
+
   public void returnBook(long issueId) {
     findIssueById(issueId).setReturnedAt(LocalDateTime.now());
 
@@ -61,4 +67,7 @@ public class IssueRepository {
     return issueAmount - returnAmount;
   }
 
+  public List<Issue> getAllIssues() {
+    return List.copyOf(issues);
+  }
 }
