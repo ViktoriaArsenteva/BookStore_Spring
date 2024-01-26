@@ -1,27 +1,29 @@
 package ru.gb.springdemo.api.rest;
 
 import org.springframework.web.bind.annotation.*;
-import ru.gb.springdemo.model.Issue;
-import ru.gb.springdemo.model.Reader;
-import ru.gb.springdemo.repository.IssueRepository;
-import ru.gb.springdemo.repository.ReaderRepository;
+import ru.gb.springdemo.Entity.Issue;
+import ru.gb.springdemo.Entity.Reader;
+import ru.gb.springdemo.service.IssuerService;
+import ru.gb.springdemo.service.ReaderService;
 
 
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/reader")
 public class ReaderController {
 
-    private final ReaderRepository repo;
-    private final IssueRepository issueRepo;
+    private final ReaderService repo;
+    private final IssuerService issueRepo;
 
-    public ReaderController(ReaderRepository repo, IssueRepository issueRepo) {
+    public ReaderController(ReaderService repo, IssuerService issueRepo) {
         this.repo = repo;
         this.issueRepo = issueRepo;
     }
 
     @GetMapping(value = "/{id}")
-    public Reader getReaderById (@PathVariable long id){
+    public Optional<Reader> getReaderById (@PathVariable long id){
         return repo.getReaderById(id);
     }
 
@@ -37,14 +39,14 @@ public class ReaderController {
 
     @PostMapping()
     public Reader addNewReader(@RequestBody Reader reader){
-        repo.addReader(reader);
+        repo.saveReader(reader);
         return reader;
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public Reader deleteReader(@PathVariable long id){
-        Reader reader = repo.getReaderById(id);
-        repo.deleteReader(reader);
+    public Optional<Reader> deleteReader(@PathVariable long id){
+        Optional<Reader> reader = repo.getReaderById(id);
+        repo.deleteReader(id);
         return reader;
     }
 }

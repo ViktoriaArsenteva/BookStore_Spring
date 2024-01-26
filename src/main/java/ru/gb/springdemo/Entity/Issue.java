@@ -24,4 +24,6 @@ public class Issue {
 
     @Column(nullable = true)
     private LocalDateTime returnedAt;
+
+
 }

@@ -5,20 +5,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.gb.springdemo.model.Issue;
+import ru.gb.springdemo.Entity.Issue;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IssueRepository extends JpaRepository<Issue, Long> {
   // В JPA репозитории необходимо только объявить интерфейс, методы будут автоматически реализованы фреймворком
 
-  Issue findIssueById(long id);
-
-  Issue findIssueByReaderId(long readerId);
+  Optional<Issue> findIssueByReaderId(long readerId);
 
   List<Issue> findAllByReaderId(long readerId);
 
+  //метод для нахождения невозращенных книг
   List<Issue> findAllByReaderIdAndReturnedAtIsNull(long readerId);
 
   // Метод для обновления даты возврата книги

@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.gb.springdemo.model.Issue;
-import ru.gb.springdemo.repository.IssueRepository;
+import ru.gb.springdemo.Entity.Issue;
 import ru.gb.springdemo.service.IssuerService;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -19,9 +19,9 @@ public class IssueController {
   @Autowired
   private IssuerService service;
 
-  private final IssueRepository repo;
+  private final IssuerService repo;
 
-  public IssueController(IssueRepository repo) {
+  public IssueController(IssuerService repo) {
     this.repo = repo;
   }
 
@@ -37,8 +37,8 @@ public class IssueController {
   Поиск запроса на выдачу книги по идентификатору
    */
   @GetMapping(value = "/{id}")
-  public Issue getIssueInfoById(@PathVariable long id){
-    return repo.findIssueById(id);
+  public Optional<Issue> getIssueInfoById(@PathVariable long id){
+    return repo.getIssueById(id);
   }
 
 /*
