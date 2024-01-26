@@ -1,73 +1,32 @@
 package ru.gb.springdemo.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.gb.springdemo.model.Issue;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Repository
-public class IssueRepository {
+public interface IssueRepository extends JpaRepository<Issue, Long> {
+  // В JPA репозитории необходимо только объявить интерфейс, методы будут автоматически реализованы фреймворком
 
-  private final List<Issue> issues;
+  Issue findIssueById(long id);
 
-  public IssueRepository() {
-    this.issues = new ArrayList<>();
-  }
+  Issue findIssueByReaderId(long readerId);
 
-  public void save(Issue issue) {
-    // insert into ....
-    issues.add(issue);
-  }
+  List<Issue> findAllByReaderId(long readerId);
 
-  public Issue findIssueById(long id){
-    return issues.stream()
-            .filter(it -> Objects.equals(it.getId(), id))
-            .findFirst()
-            .orElse(null);
-  }
+  List<Issue> findAllByReaderIdAndReturnedAtIsNull(long readerId);
 
-  public Issue findIssueByReaderId(long readerId){
-    return issues.stream()
-            .filter(it -> Objects.equals(it.getReaderId(),readerId))
-            .findFirst()
-            .orElse(null);
-  }
+  // Метод для обновления даты возврата книги
+  @Modifying
+  @Query("UPDATE Issue i SET i.returnedAt = CURRENT_TIMESTAMP WHERE i.id = :issueId")
+  void returnBook(@Param("issueId") long issueId);
 
-  public List<Issue> getAllIssuesByReaderId(long readerId) {
-    return issues.stream()
-            .filter(it -> Objects.equals(it.getReaderId(),readerId))
-            .collect(Collectors.toList());
-  }
-
-  public List<Issue> getNotReturnedIssuesByReaderId(long readerId) {
-    return issues.stream()
-            .filter(it -> Objects.isNull(it.getReturnedAt()))
-            .collect(Collectors.toList());
-  }
-
-  public void returnBook(long issueId) {
-    findIssueById(issueId).setReturnedAt(LocalDateTime.now());
-
-  }
-  /*
-  Находжение количества книг, которые сейчас на руках у читателя
-   */
-  public long amountOfBooksByReaderId(long readerId) {
-    long issueAmount = issues.stream()
-                      .filter(it -> Objects.equals(it.getReaderId(),readerId))
-                      .count();
-    long returnAmount = issues.stream()
-                        .filter(it -> Objects.equals(it.getReaderId(),readerId))
-                        .filter(it -> Objects.nonNull(it.getReturnedAt()))
-                        .count();
-    return issueAmount - returnAmount;
-  }
-
-  public List<Issue> getAllIssues() {
-    return List.copyOf(issues);
-  }
+  // Метод для подсчета количества не возвращенных книг у читателя
+  @Query("SELECT COUNT(i) FROM Issue i WHERE i.readerId = :readerId AND i.returnedAt IS NULL")
+  long countNotReturnedIssuesByReaderId(@Param("readerId") long readerId);
 }
