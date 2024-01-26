@@ -2,14 +2,7 @@ application:
   max-allowed-books: 2
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/DemoDataBase
-    username: ваше_имя_пользователя
-    password: ваш_пароль
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    show-sql: true
-    hibernate:
-      naming:
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
