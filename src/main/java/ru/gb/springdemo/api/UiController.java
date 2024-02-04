@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.gb.springdemo.Entity.Book;
 import ru.gb.springdemo.Entity.Issue;
 import ru.gb.springdemo.Entity.Reader;
@@ -24,6 +26,7 @@ public class UiController {
     private final BookService books;
     private final ReaderService readers;
     private final IssuerService issues;
+
 
 
     @GetMapping("/ui/books")

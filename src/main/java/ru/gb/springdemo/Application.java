@@ -1,46 +1,48 @@
-package ru.gb.springdemo;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.SecurityFilterChain;
+import ru.gb.springdemo.Entity.User;
+import ru.gb.springdemo.repository.UserRepository;
+
 
 @SpringBootApplication
 public class Application {
 
-	
-	/*
-	 * слои spring-приложения
-	 *
-	 * 1. controllers (api)
-	 * 2. сервисный слой (services)
-	 * 3. репозитории (repositories, dao (data access objects), ...)
-	 * 4. jpa-сущности (entity, model, domain)
-	 *
-	 *
-	 * Сервер, отвечающий за выдачу книг в библиотеке.
-	 * Нужно напрограммировать ручку, которая либо выдает книгу читателями, либо отказывает в выдаче.
-	 *
-	 * /book/** - книга
-	 * GET /book/25 - получить книгу с идентификатором 25
-	 *
-	 * /reader/** - читатель
-	 * /issue/** - информация о выдаче
-	 * POST /issue {"readerId": 25, "bookId": 57} - выдать читателю с идентификатором 25 книгу с идентификатором 57
-	 *
-	 *
+	// SecurityContext (SecurityContextHolder)
+	// SecurityContextHolder = Map<String, SecurityContext>
+	// Authorization <- [Principle (login), List<GrantedAuthority> roles]
 
-	/*
-			Tomcat - контейнер сервлетов (веб-сервер)
+	// UserDetails -
+	// UserDetailsService
+	// PasswordEncoder
 
-			/student/...
-			spring-student.war -> tomcat
-			/api/...
-			spring-api.war -> tomcat
+	// SecurityFilterChain
 
-			spring-web.jar
-	 */
+
+	// Authorization: Basic base64(username+login)
+	// Authorization: Bearer
+
+	static long id = 1L;
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		UserRepository userRepository = SpringApplication.run(Application.class, args).getBean(UserRepository.class);
+
+		saveUser(userRepository, "admin");
+		saveUser(userRepository, "user");
+		saveUser(userRepository, "auth");
+		saveUser(userRepository, "simple");
+	}
+
+	private static void saveUser(UserRepository repository, String login) {
+		User user = new User();
+		user.setId(id++);
+		user.setLogin(login);
+		user.setPassword(login);
+		user.setRole(login);
+		repository.save(user);
 	}
 
 }
