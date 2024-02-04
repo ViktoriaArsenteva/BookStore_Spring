@@ -1,4 +1,4 @@
-package ru.gb.springdemo.security;
+package ru.gb.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,14 +9,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.beans.Customizer;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfiguration {
+public class SecurityConfiguration  {
 
 //  @Bean
 //  public PasswordEncoder passwordEncoder() {
@@ -37,13 +37,17 @@ public class SecurityConfiguration {
 
         return httpSecurity
                 .authorizeHttpRequests(configurer -> configurer
-                        .requestMatchers("/ui/**").hasAuthority("user")
-                        .anyRequest().denyAll()
-                )
-                .oauth2ResourceServer(configurer -> configurer
-                        .jwt(jwtConfigurer -> jwtConfigurer
-                                .jwtAuthenticationConverter(converter))
-                )
+                                .requestMatchers("/login").permitAll()
+                                .anyRequest().authenticated()
+                        )
+                        .formLogin(form -> form
+                                .loginPage("/login")
+                                .defaultSuccessUrl("/ui/books", true)
+                                .permitAll()
+                        )
+                        .logout(logout -> logout
+                                .permitAll()
+                        )
                 .build();
     }
 
