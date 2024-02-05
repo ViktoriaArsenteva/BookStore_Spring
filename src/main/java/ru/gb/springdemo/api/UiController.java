@@ -26,7 +26,12 @@ public class UiController {
     private final BookService books;
     private final ReaderService readers;
     private final IssuerService issues;
+    
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 
 
     @GetMapping("/ui/books")

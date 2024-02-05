@@ -1,4 +1,4 @@
-package ru.gb.security;
+package ru.gb.springdemo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +18,6 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 public class SecurityConfiguration  {
 
-//  @Bean
-//  public PasswordEncoder passwordEncoder() {
-//    return new BCryptPasswordEncoder();
-//  }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -38,12 +34,13 @@ public class SecurityConfiguration  {
         return httpSecurity
                 .authorizeHttpRequests(configurer -> configurer
                                 .requestMatchers("/login").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/ui/**").authenticated()
+                                .anyRequest().permitAll()
                         )
                         .formLogin(form -> form
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/ui/books", true)
                                 .permitAll()
+
                         )
                         .logout(logout -> logout
                                 .permitAll()
