@@ -12,4 +12,13 @@ public class Reader {
 
     @Column(nullable = false)
     private String name;
+
+    public Reader(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Reader(String name) {
+        this.name = name;
+    }
 }

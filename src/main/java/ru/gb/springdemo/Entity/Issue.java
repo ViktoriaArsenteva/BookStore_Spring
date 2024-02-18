@@ -25,5 +25,13 @@ public class Issue {
     @Column(nullable = true)
     private LocalDateTime returnedAt;
 
+    public Issue(Long bookId, Long readerId) {
+        this.bookId = bookId;
+        this.readerId = readerId;
+        this.issuedAt = LocalDateTime.now();
+    }
 
+    public Issue(){
+
+    }
 }
